@@ -19,6 +19,11 @@ const server = http.createServer((req, res) => {
   var request = url.parse(req.url, true);
   console.log(request);
 
+  if (request.pathname === '/github/webhooks') {
+    console.log('got a live one coming in');
+  } else {
+
+
   var promise = new Promise(function(resolve, reject) {
     processRequest(request, (err, data) => {
       if (err) {
@@ -38,7 +43,7 @@ const server = http.createServer((req, res) => {
   });
   promise.catch(function(err) {console.error(err)});
 
-
+}
 
 });
 
