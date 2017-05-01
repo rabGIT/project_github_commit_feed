@@ -42,7 +42,15 @@ const server = http.createServer((req, res) => {
     // for the HTTP method and path
     p.then(function() {
       var payload = JSON.parse(decodeURIComponent(req.body).slice(8));
-
+            res.writeHead(200, _headers);
+            res.end('200 OK');
+            processRequest(payload.pusher.name, payload.repository.name, (err,data) => {
+              if (err) {
+                console.error(err);
+              } else {
+                console.log(data);
+              }
+            })
       console.log(payload);
     });
   } else {
@@ -62,7 +70,7 @@ const server = http.createServer((req, res) => {
     promise.then(function(data) {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/html');
-      res.writeHead(200, _headers);
+
       res.end(createResponse());
     });
     promise.catch(function(err) {
@@ -85,7 +93,12 @@ function processRequest(request, callback) {
   if (request.query.user.length == 0) {
     callback(null, 'No user');
   };
-  var p = githubAPI.commits(request.query.user, request.query.repo);
+  handleGithubData(request.query.user, request.query.repo);
+
+}
+
+function handleGithubData(user, repo, callback) {
+  var p = githubAPI.commits(user, repo);
   p.then(function(res) {
     var scrubbed = res.commits.data.map(function(commitItem) {
       return {
