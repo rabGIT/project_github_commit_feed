@@ -1,16 +1,1 @@
-{
-  "Foobar": {
-    "foobar": [
-      {
-        "message": "Update README.md",
-        "author": {
-          "name": "Foobar",
-          "email": "foobar@email.com",
-          "date": "2017-02-16T19:25:15Z"
-        },
-        "url": "https://github.com/Foobar/foobar/commit/20ad02f81024c7dc9bff6da3d8e996725203923e",
-        "sha": "20ad02f81024c7dc9bff6da3d8e996725203923e"
-      }
-    ]
-  }
-}
+{"username":"rabGIT","repo":"assignment_building_the_express_router","commits":[{"author":"rabGIT","message":"enable app.all()","html_url":"https://github.com/rabGIT/assignment_building_the_express_router/commit/ef69f16a3266a3b1c0cd21dde4981def8ae4dca1","sha":"ef69f16a3266a3b1c0cd21dde4981def8ae4dca1"},{"author":"rabGIT","message":"additional HTTP method handling","html_url":"https://github.com/rabGIT/assignment_building_the_express_router/commit/8d4fa6c243feac37e79a652013472ec48a73e263","sha":"8d4fa6c243feac37e79a652013472ec48a73e263"},{"author":"rabGIT","message":"post body processing","html_url":"https://github.com/rabGIT/assignment_building_the_express_router/commit/e526220866c4ce7dba40771824acbba5c7d77b85","sha":"e526220866c4ce7dba40771824acbba5c7d77b85"},{"author":"rabGIT","message":"add post method processing","html_url":"https://github.com/rabGIT/assignment_building_the_express_router/commit/43764a1f9e884ed9259ec728ebc97ffd9c22905f","sha":"43764a1f9e884ed9259ec728ebc97ffd9c22905f"},{"author":"rabGIT","message":"parameter routing w/ regex","html_url":"https://github.com/rabGIT/assignment_building_the_express_router/commit/7d5bec65af2c842b008bbf9120deec01887527cb","sha":"7d5bec65af2c842b008bbf9120deec01887527cb"},{"author":"rabGIT","message":"simpe express router","html_url":"https://github.com/rabGIT/assignment_building_the_express_router/commit/3c53666237198bdbe8f711576e4410fc04577425","sha":"3c53666237198bdbe8f711576e4410fc04577425"},{"author":"Chris Scavello","message":"Update README.md","html_url":"https://github.com/rabGIT/assignment_building_the_express_router/commit/33034e9cde72528af78906518180c5131558dfb8","sha":"33034e9cde72528af78906518180c5131558dfb8"},{"author":"Chris Scavello","message":"Initial commit","html_url":"https://github.com/rabGIT/assignment_building_the_express_router/commit/fe5365860413daa56107e7acc55ce85f83b57045","sha":"fe5365860413daa56107e7acc55ce85f83b57045"}]}

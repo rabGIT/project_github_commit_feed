@@ -3,9 +3,7 @@ const url = require('url');
 const fs = require('fs');
 const githubAPI = require('./lib/githubAPI');
 
-// load commitFeed data
-const commitFeed = require('./data/commits.json');
-var commits = JSON.stringify(commitFeed, null, 2);
+
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -14,18 +12,71 @@ const server = http.createServer((req, res) => {
 
   // process form request
   var request = url.parse(req.url, true);
-  console.log(`Username: ${request.query.user} \nRepo: ${request.query.repo} `);
-  var p = githubAPI.commits(request.query.user, request.query.repo);
-  p.then(function(res) { console.log( res) }, function(err) {console.error(err);}  );
 
+
+  var promise = new Promise(function(resolve, reject) {
+    processRequest(request, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
   // build response
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/html');
-  var html = fs.readFileSync('./public/index.html');
-  html = html.toString().replace('{{ commitFeed }}' , commits)
-  res.end(html);
+  // load commitFeed data, but only when we know the request is processed
+  promise.then(function(data) {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/html');
+    res.end(createResponse());
+  });
+  promise.catch(function(err) {console.error(err)});
+
+
+
 });
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+function processRequest(request, callback) {
+  console.log(`Username: ${request.query.user} \nRepo: ${request.query.repo} `);
+  if (request.query.user == undefined) {
+    callback(null, 'No user');
+  };
+  if (request.query.user.length == 0) {
+    callback(null, 'No user');
+  };
+  var p = githubAPI.commits(request.query.user, request.query.repo);
+  p.then(function(res) {
+    var scrubbed = res.commits.data.map(function(commitItem) {
+      return {
+        author: commitItem.commit.author.name,
+        message: commitItem.commit.message,
+        html_url: commitItem.html_url,
+        sha: commitItem.sha
+      }
+    });
+    var request = {
+      username: res.username,
+      repo: res.repo,
+      commits: scrubbed
+    };
+    console.log(JSON.stringify(request));
+    fs.writeFileSync('./data/commits.json', JSON.stringify(request));
+    callback(null, 'Success');
+  });
+  p.catch(function(err) {
+    console.log(err);
+  });
+}
+
+function createResponse() {
+  var commitFeed = JSON.parse(fs.readFileSync('./data/commits.json'));
+  var commits = JSON.stringify(commitFeed, null, 2);
+
+  var html = fs.readFileSync('./public/index.html');
+  return html.toString().replace('{{ commitFeed }}', commits)
+
+}
