@@ -41,7 +41,9 @@ const server = http.createServer((req, res) => {
     // Respond with the correct handler
     // for the HTTP method and path
     p.then(function() {
-      console.log(req.body);
+      var payload = JSON.parse(decodeURI(req.body).slice(8));
+
+      console.log(payload);
     });
   } else {
 
