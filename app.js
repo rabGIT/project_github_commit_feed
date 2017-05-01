@@ -28,7 +28,7 @@ const server = http.createServer((req, res) => {
 
   // process form request
   var request = url.parse(req.url, true);
-  console.log(req.body);
+  console.log(req);
 
   if (request.pathname === '/github/webhooks') {
     console.log('got a live one coming in');
@@ -40,8 +40,8 @@ const server = http.createServer((req, res) => {
 
     // Respond with the correct handler
     // for the HTTP method and path
-    p.then(function(data) {
-      console.log(data);
+    p.then(function() {
+      console.log(req.body);
     });
   } else {
 
