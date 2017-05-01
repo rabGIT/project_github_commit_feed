@@ -1,6 +1,9 @@
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
+const githubAPI = require('./lib/githubAPI');
+
+// load commitFeed data
 const commitFeed = require('./data/commits.json');
 var commits = JSON.stringify(commitFeed, null, 2);
 
@@ -12,6 +15,8 @@ const server = http.createServer((req, res) => {
   // process form request
   var request = url.parse(req.url, true);
   console.log(`Username: ${request.query.user} \nRepo: ${request.query.repo} `);
+  var p = githubAPI.commits(request.query.user, request.query.repo);
+  p.then(function(res) { console.log( res) }, function(err) {console.error(err);}  );
 
   // build response
   res.statusCode = 200;
