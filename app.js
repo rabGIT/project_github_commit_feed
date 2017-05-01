@@ -28,34 +28,28 @@ const server = http.createServer((req, res) => {
 
   // process form request
   var request = url.parse(req.url, true);
-  console.log(req);
+
 
   if (request.pathname === '/github/webhooks') {
     console.log('got a live one coming in');
     var p = new Promise((resolve) => {
-
       _extractBodyData(req, resolve);
-
     });
-
-    // Respond with the correct handler
-    // for the HTTP method and path
     p.then(function() {
       var payload = JSON.parse(decodeURIComponent(req.body).slice(8));
-            res.writeHead(200, _headers);
-            res.end('200 OK');
-            processRequest(payload.pusher.name, payload.repository.name, (err,data) => {
-              if (err) {
-                console.error(err);
-              } else {
-                console.log(data);
-              }
-            })
-      console.log(payload);
+      res.writeHead(200, _headers);
+      res.end('200 OK');
+      handleGithubData(payload.pusher.name, payload.repository.name, (err, data) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log(data);
+        }
+      })
     });
   } else {
 
-
+    console.log('not a github webhook');
     var promise = new Promise(function(resolve, reject) {
       processRequest(request, (err, data) => {
         if (err) {
@@ -86,14 +80,15 @@ server.listen(port, hostname, () => {
 });
 
 function processRequest(request, callback) {
-  console.log(`Username: ${request.query.user} \nRepo: ${request.query.repo} `);
+
   if (request.query.user == undefined) {
     callback(null, 'No user');
   };
   if (request.query.user.length == 0) {
     callback(null, 'No user');
   };
-  handleGithubData(request.query.user, request.query.repo);
+  console.log(`Username: ${request.query.user} \nRepo: ${request.query.repo} `);
+  handleGithubData(request.query.user, request.query.repo, callback);
 
 }
 
