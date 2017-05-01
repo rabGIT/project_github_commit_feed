@@ -13,6 +13,17 @@ var _headers = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
 };
 
+var _extractBodyData = (req, done) => {
+  var body = '';
+  req.on('data', (data) => {
+    body += data;
+  });
+  req.on('end', () => {
+    req.body = body;
+    done();
+  });
+};
+
 const server = http.createServer((req, res) => {
 
   // process form request
@@ -21,6 +32,17 @@ const server = http.createServer((req, res) => {
 
   if (request.pathname === '/github/webhooks') {
     console.log('got a live one coming in');
+    var p = new Promise((resolve) => {
+
+        _extractBodyData(req, resolve);
+
+    });
+
+    // Respond with the correct handler
+    // for the HTTP method and path
+    p.then(function(data) {
+      console.log(data);
+    });
   } else {
 
 
