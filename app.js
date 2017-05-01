@@ -28,13 +28,13 @@ const server = http.createServer((req, res) => {
 
   // process form request
   var request = url.parse(req.url, true);
-  console.log(request);
+  console.log(req.body);
 
   if (request.pathname === '/github/webhooks') {
     console.log('got a live one coming in');
     var p = new Promise((resolve) => {
 
-        _extractBodyData(req, resolve);
+      _extractBodyData(req, resolve);
 
     });
 
@@ -46,26 +46,28 @@ const server = http.createServer((req, res) => {
   } else {
 
 
-  var promise = new Promise(function(resolve, reject) {
-    processRequest(request, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
+    var promise = new Promise(function(resolve, reject) {
+      processRequest(request, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
     });
-  });
-  // build response
-  // load commitFeed data, but only when we know the request is processed
-  promise.then(function(data) {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200, _headers);
-    res.end(createResponse());
-  });
-  promise.catch(function(err) {console.error(err)});
+    // build response
+    // load commitFeed data, but only when we know the request is processed
+    promise.then(function(data) {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html');
+      res.writeHead(200, _headers);
+      res.end(createResponse());
+    });
+    promise.catch(function(err) {
+      console.error(err)
+    });
 
-}
+  }
 
 });
 
